@@ -3,9 +3,9 @@
  */
 public class Nave {
 
-    int vida;
-    int municao;
-    int combustivel;
+    private int vida;
+    private int municao;
+    private int combustivel;
 
     public Nave(int vida, int municao, int combustivel) {
         this.vida = vida;

@@ -2,7 +2,7 @@
  * Created by marcus on 02/01/17.
  */
 public class Asteroide {
-    int vida;
+    private int vida;
 
     public Asteroide(int vida) {
         this.vida = vida;
