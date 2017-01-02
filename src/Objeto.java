@@ -33,4 +33,24 @@ public class Objeto {
         return position;
 
     }
+
+    public void moveCima(){
+        this.y = this.y -1;
+
+    }
+
+    public void moveBaixo(){
+        this.y = this.y +1;
+
+    }
+
+    public void moveDireita(){
+        this.y = this.x +1;
+
+    }
+
+    public void moveEsquerda(){
+        this.y = this.x -1;
+
+    }
 }
