@@ -1,0 +1,14 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Java template
+*.class
+
+# Package Files #
+
+# Intellij folders
+/.idea/
+/libs/liblwjgl.so
+/libs/libopenal.so
+/libs/libjinput-linux.so
+/libs/libopenal64.so
+/libs/libjinput-linux64.so
+/libs/liblwjgl64.so
