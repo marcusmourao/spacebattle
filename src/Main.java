@@ -95,7 +95,7 @@ public class Main {
                     // get event key here
                     if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
                         System.out.println("PEW");
-                        municao.add(new Bala(400 - (textureNave.getImageWidth()/2), 600 -textureNave.getImageHeight(), 50));
+                        municao.add(new Bala( nave.getX(), 600 -textureNave.getImageHeight(), 50));
                     }
                     if (Keyboard.getEventKey() == Keyboard.KEY_LEFT) {
                         if (nave.getX() >= 5)
