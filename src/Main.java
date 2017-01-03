@@ -2,6 +2,8 @@
  * Created by lucas on 02/01/17.
  */
 import java.io.IOException;
+import java.util.Vector;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -16,10 +18,12 @@ import org.lwjgl.input.Keyboard;
 public class Main {
 
     int time=0;
-    Asteroide asteroid;
+    Vector<Bala> municao = new Vector<>();
+    Asteroide asteroide;
     Nave nave;
-    Texture texture;
-    Texture asteroide;
+    Texture textureNave;
+    Texture textureAsteroide;
+    Texture textureBala;
 
 
     public void render(Texture texture, int positionX, int positionY) throws IOException {
@@ -66,25 +70,32 @@ public class Main {
             GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
             try {
-                texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("img/nave.png"));
-                asteroide = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("img/asteroid.png"));
+                textureNave = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("img/nave.png"));
+                textureAsteroide = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("img/asteroid.png"));
+                textureBala = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream("img/bala.jpg"));
+
             } catch (IOException e) {
                 System.err.println(e.getStackTrace());
             }
 
-            nave = new Nave(400 - (texture.getImageWidth()/2), 600 - 50 - texture.getImageHeight(), 500, 500, 500);
-            asteroid = new Asteroide(400 - (asteroide.getImageWidth()/2), 0, 50);
+            nave = new Nave(400 - (textureNave.getImageWidth()/2), 600 - 50 - textureNave.getImageHeight(), 500, 500, 500);
+            asteroide = new Asteroide(400 - (textureAsteroide.getImageWidth()/2), 0, 50);
 
 
             while(!Display.isCloseRequested()) {
                 GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-                render(texture, nave.getX(), nave.getY());
-                render(asteroide, asteroid.getX(), asteroid.getY());
+                render(textureNave, nave.getX(), nave.getY());
+                render(textureAsteroide, asteroide.getX(), asteroide.getY());
+                if(!municao.isEmpty()){
+                    for(int i=0; i<municao.size();i++)
+                        render(textureBala, municao.get(i).getX(), municao.get(i).getY());
+                }
                 Display.update();
                 while (Keyboard.next()){
                     // get event key here
                     if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
                         System.out.println("PEW");
+                        municao.add(new Bala(400 - (textureNave.getImageWidth()/2), 600 -textureNave.getImageHeight(), 50));
                     }
                     if (Keyboard.getEventKey() == Keyboard.KEY_LEFT) {
                         if (nave.getX() >= 5)
@@ -92,13 +103,17 @@ public class Main {
                         //System.out.println("Esquerda");
                     }
                     if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT) {
-                        if (nave.getX() <= 795 - texture.getImageWidth())
+                        if (nave.getX() <= 795 - textureNave.getImageWidth())
                             nave.setX(nave.getX() + 5);
                         //System.out.println("Direita");
                     }
                 }
                 if(time % 5 ==0)
-                    asteroid.setY(asteroid.getY()+1);
+                {
+                    asteroide.setY(asteroide.getY()+1);
+                    for(int i=0; i<municao.size();i++)
+                        municao.get(i).setY(municao.get(i).getY() - 10);
+                }
                 time ++;
             }
 
