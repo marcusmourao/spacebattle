@@ -3,6 +3,7 @@
  */
 import java.io.IOException;
 import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -19,7 +20,7 @@ public class Main {
 
     int time=0;
     Vector<Bala> municao = new Vector<>();
-    Asteroide asteroide;
+    Vector<Asteroide> asteroide = new Vector<>();
     Nave nave;
     Texture textureNave;
     Texture textureAsteroide;
@@ -79,13 +80,17 @@ public class Main {
             }
 
             nave = new Nave(400 - (textureNave.getImageWidth()/2), 600 - 50 - textureNave.getImageHeight(), 500, 500, 500);
-            asteroide = new Asteroide(400 - (textureAsteroide.getImageWidth()/2), 0, 50);
+            asteroide.add(new Asteroide(400 - (textureAsteroide.getImageWidth()/2), 0, 50));
 
 
             while(!Display.isCloseRequested()) {
                 GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
                 render(textureNave, nave.getX(), nave.getY());
-                render(textureAsteroide, asteroide.getX(), asteroide.getY());
+                if(!asteroide.isEmpty()){
+                    for(int i=0; i<asteroide.size(); i++)
+                        render(textureAsteroide, asteroide.get(i).getX(), asteroide.get(i).getY());
+
+                }
                 if(!municao.isEmpty()){
                     for(int i=0; i<municao.size();i++)
                         render(textureBala, municao.get(i).getX(), municao.get(i).getY());
@@ -110,10 +115,18 @@ public class Main {
                 }
                 if(time % 5 ==0)
                 {
-                    asteroide.setY(asteroide.getY()+1);
+                    if(!asteroide.isEmpty()){
+                        for(int i=0; i< asteroide.size(); i++)
+                            asteroide.get(i).setY(asteroide.get(i).getY()+1);
+                    }
                     for(int i=0; i<municao.size();i++)
                         municao.get(i).setY(municao.get(i).getY() - 10);
                 }
+                if(time % 200 == 0) {
+                        int randomNum = ThreadLocalRandom.current().nextInt(textureAsteroide.getImageWidth()/2, 800 + 1);
+                        asteroide.add(new Asteroide(randomNum - (textureAsteroide.getImageWidth()/2), 0, 50));
+                 }
+
                 time ++;
             }
 
