@@ -15,10 +15,13 @@ import org.lwjgl.input.Keyboard;
 
 public class Main {
 
+    Asteroide asteroid;
     Nave nave;
     Texture texture;
+    Texture asteroide;
 
-    public void render() throws IOException {
+
+    public void render(Texture texture, int positionX, int positionY) throws IOException {
 
         Color.white.bind();
         texture.bind(); // or GL11.glBind(texture.getTextureID());
@@ -26,16 +29,16 @@ public class Main {
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(0,0);
         //GL11.glVertex2f(100,100);
-        GL11.glVertex2f(nave.getX(),nave.getY());
+        GL11.glVertex2f(positionX,positionY);
         GL11.glTexCoord2f(1,0);
-        GL11.glVertex2f(nave.getX()+texture.getTextureWidth(),nave.getY());
+        GL11.glVertex2f(positionX+texture.getTextureWidth(),positionY);
         //GL11.glVertex2f(100+texture.getTextureWidth(),100);
         GL11.glTexCoord2f(1,1);
         //GL11.glVertex2f(100+texture.getTextureWidth(),100+texture.getTextureHeight());
-        GL11.glVertex2f(nave.getX()+texture.getTextureWidth(),nave.getY()+texture.getTextureHeight());
+        GL11.glVertex2f(positionX+texture.getTextureWidth(),positionY+texture.getTextureHeight());
         GL11.glTexCoord2f(0,1);
         //GL11.glVertex2f(100,100+texture.getTextureHeight());
-        GL11.glVertex2f(nave.getX(),nave.getY()+texture.getTextureHeight());
+        GL11.glVertex2f(positionX,positionY+texture.getTextureHeight());
         GL11.glEnd();
     }
 
@@ -62,16 +65,20 @@ public class Main {
             GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
             try {
-                texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("nave.png"));
+                texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("img/nave.png"));
+                asteroide = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("img/asteroid.png"));
             } catch (IOException e) {
                 System.err.println(e.getStackTrace());
             }
 
             nave = new Nave(400 - (texture.getImageWidth()/2), 600 - 50 - texture.getImageHeight(), 500, 500, 500);
+            asteroid = new Asteroide(400 - (asteroide.getImageWidth()/2), 0, 50);
+
 
             while(!Display.isCloseRequested()) {
                 GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-                render();
+                render(texture, nave.getX(), nave.getY());
+                render(asteroide, asteroid.getX(), asteroid.getY());
                 Display.update();
                 while (Keyboard.next()){
                     // get event key here
