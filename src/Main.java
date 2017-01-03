@@ -15,6 +15,7 @@ import org.lwjgl.input.Keyboard;
 
 public class Main {
 
+    int time=0;
     Asteroide asteroid;
     Nave nave;
     Texture texture;
@@ -96,6 +97,9 @@ public class Main {
                         //System.out.println("Direita");
                     }
                 }
+                if(time % 5 ==0)
+                    asteroid.setY(asteroid.getY()+1);
+                time ++;
             }
 
             Display.destroy();
