@@ -15,30 +15,32 @@ import org.lwjgl.input.Keyboard;
 
 public class Main {
 
+    Nave nave;
+    Texture texture;
 
     public void render() throws IOException {
-        Texture texture;
-        texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("nave.png"));
-
 
         Color.white.bind();
         texture.bind(); // or GL11.glBind(texture.getTextureID());
 
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(0,0);
-        GL11.glVertex2f(100,100);
+        //GL11.glVertex2f(100,100);
+        GL11.glVertex2f(nave.getX(),nave.getY());
         GL11.glTexCoord2f(1,0);
-        GL11.glVertex2f(100+texture.getTextureWidth(),100);
+        GL11.glVertex2f(nave.getX()+texture.getTextureWidth(),nave.getY());
+        //GL11.glVertex2f(100+texture.getTextureWidth(),100);
         GL11.glTexCoord2f(1,1);
-        GL11.glVertex2f(100+texture.getTextureWidth(),100+texture.getTextureHeight());
+        //GL11.glVertex2f(100+texture.getTextureWidth(),100+texture.getTextureHeight());
+        GL11.glVertex2f(nave.getX()+texture.getTextureWidth(),nave.getY()+texture.getTextureHeight());
         GL11.glTexCoord2f(0,1);
-        GL11.glVertex2f(100,100+texture.getTextureHeight());
+        //GL11.glVertex2f(100,100+texture.getTextureHeight());
+        GL11.glVertex2f(nave.getX(),nave.getY()+texture.getTextureHeight());
         GL11.glEnd();
     }
 
 
     public Main() {
-
         try {
             Display.setDisplayMode(new DisplayMode(800, 600));
             Display.create();
@@ -59,6 +61,14 @@ public class Main {
             GL11.glOrtho(0, 800, 600, 0, 1, -1);
             GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
+            try {
+                texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("nave.png"));
+            } catch (IOException e) {
+                System.err.println(e.getStackTrace());
+            }
+
+            nave = new Nave(400 - (texture.getImageWidth()/2), 600 - 50 - texture.getImageHeight(), 500, 500, 500);
+
             while(!Display.isCloseRequested()) {
                 GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
                 render();
@@ -66,13 +76,17 @@ public class Main {
                 while (Keyboard.next()){
                     // get event key here
                     if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
-                        System.out.println("Espaço");
+                        System.out.println("PEW");
                     }
                     if (Keyboard.getEventKey() == Keyboard.KEY_LEFT) {
-                        System.out.println("Esquerda");
+                        if (nave.getX() >= 5)
+                            nave.setX(nave.getX() - 5);
+                        //System.out.println("Esquerda");
                     }
                     if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT) {
-                        System.out.println("Direita");
+                        if (nave.getX() <= 795 - texture.getImageWidth())
+                            nave.setX(nave.getX() + 5);
+                        //System.out.println("Direita");
                     }
                 }
             }
