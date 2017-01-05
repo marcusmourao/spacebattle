@@ -22,6 +22,10 @@ public class Nave extends Objeto {
         this.vida = vida;
     }
 
+    public void diminuiVida() {
+        vida--;
+    }
+
     public int getMunicao() {
         return municao;
     }

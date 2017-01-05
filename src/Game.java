@@ -43,7 +43,7 @@ public class Game extends BasicGameState {
         textureAsteroide = new Image("img/asteroid.png");
         textureBala = new Image("img/bala.png");
 
-        nave = new Nave(400 - ((int) textureNave.getTextureWidth()/2), 600 - 50 - (int) textureNave.getTextureHeight(), (int) textureNave.getTextureWidth(), (int) textureNave.getTextureHeight(), 500, 500, 500);
+        nave = new Nave(400 - (textureNave.getWidth()/2), 600 - 15 - textureNave.getHeight(), textureNave.getWidth(), textureNave.getHeight(), 5, 500, 500);
         asteroide.add(new Asteroide(400 - (textureAsteroide.getWidth()/2), 0, textureAsteroide.getWidth(), textureAsteroide.getHeight(), 50));
     }
 
@@ -63,6 +63,16 @@ public class Game extends BasicGameState {
         }
 
         g.drawString("Pontuacao: "+pontuacao,10,35);
+        String vida = "Vida: ";
+        for (int i = 0; i < nave.getVida(); i++)
+            vida += "*";
+        g.drawString(vida, 10, 60);
+
+        // Verifica se o jogador morreu
+        // TODO: bloquear o jogo
+        if (nave.getVida() <= 0) {
+            g.drawString("Game Over", 370, 290);
+        }
     }
 
     // update-method with all the magic happening in it
@@ -73,7 +83,7 @@ public class Game extends BasicGameState {
         //verifica se um tiro foi disparado
         if (input.isKeyPressed( Keyboard.KEY_SPACE)) {
             //System.out.println("Tiro");
-            municao.add(new Bala( nave.getX(), 600 - textureNave.getHeight(), textureNave.getWidth(), textureNave.getHeight(), 50));
+            municao.add(new Bala(nave.getX()+(nave.getLargura()/5), 600 - nave.getAltura() - 15, textureBala.getWidth(), textureBala.getHeight()));
         }
 
         //muda a posicao da nave para a esquerda
@@ -89,12 +99,26 @@ public class Game extends BasicGameState {
             //System.out.println("Direita");
         }
 
-        if(time % 5 ==0)
+        // Definicao da velocidade de criacao dos asteroides
+        int velocidadeAsteroide;
+        if (pontuacao <= 20)
+            velocidadeAsteroide = 1;
+        else if (pontuacao <= 50)
+            velocidadeAsteroide = 2;
+        else if (pontuacao <= 90)
+            velocidadeAsteroide = 3;
+        else
+            velocidadeAsteroide = 5;
+
+        if(time % 5 == 0)
         {
+            // Atualiza  posicao dos asteroides
             if(!asteroide.isEmpty()){
                 for(int i=0; i< asteroide.size(); i++)
-                    asteroide.get(i).setY(asteroide.get(i).getY()+1);
+                    asteroide.get(i).setY(asteroide.get(i).getY()+velocidadeAsteroide);
             }
+
+            // Verifica se alguma bala colidiu com asteroide
             for(int i=0; i<municao.size();i++) {
                 municao.get(i).setY(municao.get(i).getY() - 40);
                 for (int j = 0; j < asteroide.size(); j++)
@@ -103,11 +127,34 @@ public class Game extends BasicGameState {
                         //System.out.println("Abateu");
                         municao.remove(i);
                         pontuacao++;
+                        break;
                     }
+            }
+
+            // Verifica se algum asteroide colidiu com a nave
+            for (int i = 0; i < asteroide.size(); i++) {
+                if (asteroide.get(i).colideCom(nave)) {
+                    nave.diminuiVida();
+                    asteroide.remove(i);
+                    break;
+                }
             }
         }
 
-        if(time % 200 == 0) {
+        // Aumenta a velocidade da criacao de novos asteroides
+        // Quanto menor o valor, maior a velocidade
+        int velocidadeCriacaoAsteroides;
+        if (pontuacao <= 20)
+            velocidadeCriacaoAsteroides = 150;
+        else if (pontuacao <= 50)
+            velocidadeCriacaoAsteroides = 100;
+        else if (pontuacao <= 90)
+            velocidadeCriacaoAsteroides = 60;
+        else
+            velocidadeCriacaoAsteroides = 40;
+
+        // Criacao de novos asteroides
+        if(time % velocidadeCriacaoAsteroides == 0) {
             int randomNum = ThreadLocalRandom.current().nextInt(textureAsteroide.getWidth()/2, 800 + 1);
             asteroide.add(new Asteroide(randomNum - (textureAsteroide.getWidth()/2), 0, textureAsteroide.getWidth(), textureAsteroide.getHeight(), 50));
         }
