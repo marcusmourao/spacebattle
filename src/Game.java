@@ -26,18 +26,18 @@ public class Game extends BasicGameState {
     private ArrayList<Bala> municao = new ArrayList<>();
     private ArrayList<Asteroide> asteroide = new ArrayList<>();
     private Nave nave;
+    private int pontuacao;
 
     private Image textureNave;
     private Image textureAsteroide;
     private Image textureBala;
-
-    private Time
 
     private Input input;
 
     // init-method for initializing all resources
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+        pontuacao = 0;
 
         textureNave = new Image("img/nave.png");
         textureAsteroide = new Image("img/asteroid.png");
@@ -45,8 +45,6 @@ public class Game extends BasicGameState {
 
         nave = new Nave(400 - ((int) textureNave.getTextureWidth()/2), 600 - 50 - (int) textureNave.getTextureHeight(), (int) textureNave.getTextureWidth(), (int) textureNave.getTextureHeight(), 500, 500, 500);
         asteroide.add(new Asteroide(400 - (textureAsteroide.getWidth()/2), 0, textureAsteroide.getWidth(), textureAsteroide.getHeight(), 50));
-
-
     }
 
     // render-method for all the things happening on-screen
@@ -64,6 +62,7 @@ public class Game extends BasicGameState {
                 textureBala.draw(municao.get(i).getX(),municao.get(i).getY());
         }
 
+        g.drawString("Pontuacao: "+pontuacao,10,35);
     }
 
     // update-method with all the magic happening in it
@@ -71,9 +70,8 @@ public class Game extends BasicGameState {
     public void update(GameContainer gc, StateBasedGame sbg, int arg2) throws SlickException {
         input = gc.getInput();
 
-
         //verifica se um tiro foi disparado
-        if (input.isKeyDown(Keyboard.KEY_SPACE)) {
+        if (input.isKeyPressed( Keyboard.KEY_SPACE)) {
             //System.out.println("Tiro");
             municao.add(new Bala( nave.getX(), 600 - textureNave.getHeight(), textureNave.getWidth(), textureNave.getHeight(), 50));
         }
@@ -98,12 +96,13 @@ public class Game extends BasicGameState {
                     asteroide.get(i).setY(asteroide.get(i).getY()+1);
             }
             for(int i=0; i<municao.size();i++) {
-                municao.get(i).setY(municao.get(i).getY() - 10);
+                municao.get(i).setY(municao.get(i).getY() - 40);
                 for (int j = 0; j < asteroide.size(); j++)
                     if (municao.get(i).colideCom(asteroide.get(j))) {
                         asteroide.remove(j);
-                        System.out.println("Abateu");
+                        //System.out.println("Abateu");
                         municao.remove(i);
+                        pontuacao++;
                     }
             }
         }
