@@ -35,7 +35,7 @@ public class Application extends StateBasedGame {
             AppGameContainer app = new AppGameContainer(new Application("Space Invader"));
             app.setDisplayMode(WIDTH, HEIGHT, false);
             app.setTargetFrameRate(FPS);
-            app.setShowFPS(true);
+            app.setShowFPS(false);
             app.start();
 
         } catch(SlickException e) {
