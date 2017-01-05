@@ -69,9 +69,8 @@ public class Game extends BasicGameState {
         g.drawString(vida, 10, 60);
 
         // Verifica se o jogador morreu
-        // TODO: bloquear o jogo
         if (nave.getVida() <= 0) {
-            g.drawString("Game Over", 370, 290);
+            g.drawString("Game Over", 350, 290);
         }
     }
 
@@ -80,23 +79,26 @@ public class Game extends BasicGameState {
     public void update(GameContainer gc, StateBasedGame sbg, int arg2) throws SlickException {
         input = gc.getInput();
 
-        //verifica se um tiro foi disparado
-        if (input.isKeyPressed( Keyboard.KEY_SPACE)) {
-            //System.out.println("Tiro");
-            municao.add(new Bala(nave.getX()+(nave.getLargura()/5), 600 - nave.getAltura() - 15, textureBala.getWidth(), textureBala.getHeight()));
-        }
+        // Se a nave nao possuir mais vida, bloqueia os movimentos do usuario
+        if (nave.getVida() > 0) {
+            //verifica se um tiro foi disparado
+            if (input.isKeyPressed(Keyboard.KEY_SPACE)) {
+                //System.out.println("Tiro");
+                municao.add(new Bala(nave.getX() + (nave.getLargura() / 5), 600 - nave.getAltura() - 15, textureBala.getWidth(), textureBala.getHeight()));
+            }
 
-        //muda a posicao da nave para a esquerda
-        if (input.isKeyDown(Keyboard.KEY_LEFT)) {
-            if (nave.getX() >= 5)
-                nave.setX(nave.getX() - 5);
-            //System.out.println("Esquerda");
-        }
-        //muda a posicao da nave para a direita
-        if (input.isKeyDown(Keyboard.KEY_RIGHT)) {
-            if (nave.getX() <= 795 - textureNave.getWidth())
-                nave.setX(nave.getX() + 5);
-            //System.out.println("Direita");
+            //muda a posicao da nave para a esquerda
+            if (input.isKeyDown(Keyboard.KEY_LEFT)) {
+                if (nave.getX() >= 5)
+                    nave.setX(nave.getX() - 5);
+                //System.out.println("Esquerda");
+            }
+            //muda a posicao da nave para a direita
+            if (input.isKeyDown(Keyboard.KEY_RIGHT)) {
+                if (nave.getX() <= 795 - textureNave.getWidth())
+                    nave.setX(nave.getX() + 5);
+                //System.out.println("Direita");
+            }
         }
 
         // Definicao da velocidade de criacao dos asteroides
