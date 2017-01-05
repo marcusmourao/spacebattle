@@ -81,11 +81,11 @@ public class Game extends BasicGameState {
                 textureBala.draw(municao.get(i).getX(),municao.get(i).getY());
         }
 
-        g.drawString("Pontuacao: "+pontuacao,10,35);
+        g.drawString("Pontuacao: "+pontuacao,10,10);
         String vida = "Vida: ";
         for (int i = 0; i < nave.getVida(); i++)
             vida += "*";
-        g.drawString(vida, 10, 60);
+        g.drawString(vida, 10, 35);
 
         // Verifica se o jogador morreu
         if (nave.getVida() <= 0) {
@@ -155,9 +155,9 @@ public class Game extends BasicGameState {
                         break;
                     }
 
-                //remove a munição quando ela sair na tela
-                if(!collision_asteroid && municao.get(i).getY() < 0){
-                    municao.remove(i);
+                    //remove a munição quando ela sair na tela
+                    if(!collision_asteroid && municao.get(i).getY() < 0){
+                        municao.remove(i);
                 }
             }
 

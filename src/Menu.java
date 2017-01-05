@@ -16,6 +16,10 @@ public class Menu extends BasicGameState {
 
     private Image background;
     private Image playNow;
+    private Image rules;
+    private Image history;
+    private Image next;
+    private int step;
 
     private Music music;
 
@@ -23,7 +27,11 @@ public class Menu extends BasicGameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         background = new Image("img/space.png");
-        playNow = new Image("img/playNow.png");
+        playNow = new Image("img/play.png");
+        history = new Image("img/rules.png");
+        rules = new Image("img/rules2.png");
+        next = new Image("img/next.png");
+        step = 2;
 
         music = new Music("music/03-stage-1.ogg");
         music.setVolume(0.2f);
@@ -34,8 +42,16 @@ public class Menu extends BasicGameState {
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         background.draw(0,0);
-        playNow.draw(200,200);
-//        g.drawString("click para jogar!",200,150);
+
+       if(step == 2){
+           playNow.draw(250,250);
+       }else if(step == 1) {
+           history.draw(0,0);
+           next.draw(250,450);
+       }else if(step == 0){
+           rules.draw(0,0);
+           next.draw(250,450);
+       }
 
     }
 
@@ -46,8 +62,11 @@ public class Menu extends BasicGameState {
         int xpos = Mouse.getX();
         int ypos = Mouse.getY();
 
-        if(input.isMouseButtonDown(0)){
-            sbg.enterState(1); //mudança de estado
+        if(input.isMousePressed(0)){
+            if(step == 0){
+                sbg.enterState(1); //mudança de estado
+            }
+            step--;
         }
     }
 
