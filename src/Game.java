@@ -31,6 +31,7 @@ public class Game extends BasicGameState {
     private Image textureNave;
     private Image textureAsteroide;
     private Image textureBala;
+    private Image background;
 
     private Input input;
 
@@ -42,6 +43,7 @@ public class Game extends BasicGameState {
         textureNave = new Image("img/nave.png");
         textureAsteroide = new Image("img/asteroid.png");
         textureBala = new Image("img/bala.png");
+        background = new Image("img/space.png");
 
         nave = new Nave(400 - (textureNave.getWidth()/2), 600 - 15 - textureNave.getHeight(), textureNave.getWidth(), textureNave.getHeight(), 5, 500, 500);
         asteroide.add(new Asteroide(400 - (textureAsteroide.getWidth()/2), 0, textureAsteroide.getWidth(), textureAsteroide.getHeight(), 50));
@@ -50,6 +52,7 @@ public class Game extends BasicGameState {
     // render-method for all the things happening on-screen
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+        background.draw(0,0);
         textureNave.draw(nave.getX(),nave.getY());
 
         if(!asteroide.isEmpty()){

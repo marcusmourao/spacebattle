@@ -1,8 +1,5 @@
 import org.lwjgl.input.Mouse;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -17,16 +14,19 @@ public class Menu extends BasicGameState {
 
     private Input input;
 
+    private Image background;
+
     // init-method for initializing all resources
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-
+        background = new Image("img/space.png");
     }
 
     // render-method for all the things happening on-screen
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 //        g.fillOval(75,100,100,100);
+        background.draw(0,0);
         g.drawString("click para jogar!",200,150);
 
     }
