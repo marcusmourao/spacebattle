@@ -18,13 +18,27 @@ import org.lwjgl.input.Keyboard;
 
 public class Main {
 
+    // Game state identifiers
+    public static final int SPLASHSCREEN = 0;
+    public static final int MAINMENU     = 1;
+    public static final int GAME         = 2;
+
+    // Application Properties
+    public static final int WIDTH   = 800;
+    public static final int HEIGHT  = 600;
+    public static final int FPS     = 60;
+    public static final double VERSION = 1.0;
+
+
     int time=0;
     Vector<Bala> municao = new Vector<>();
     Vector<Asteroide> asteroide = new Vector<>();
     Nave nave;
+
     Texture textureNave;
     Texture textureAsteroide;
     Texture textureBala;
+    Texture textureBackground;
 
 
     public void render(Texture texture, int positionX, int positionY) throws IOException {
@@ -51,7 +65,7 @@ public class Main {
 
     public Main() {
         try {
-            Display.setDisplayMode(new DisplayMode(800, 600));
+            Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
             Display.create();
 
             GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -71,6 +85,7 @@ public class Main {
             GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
             try {
+                textureBackground = TextureLoader.getTexture("PNG",ResourceLoader.getResourceAsStream("img/space.png"));
                 textureNave = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("img/nave.png"));
                 textureAsteroide = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("img/asteroid.png"));
                 textureBala = TextureLoader.getTexture("JPG", ResourceLoader.getResourceAsStream("img/bala.jpg"));
@@ -85,16 +100,20 @@ public class Main {
 
             while(!Display.isCloseRequested()) {
                 GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-                render(textureNave, nave.getX(), nave.getY());
-                if(!asteroide.isEmpty()){
-                    for(int i=0; i<asteroide.size(); i++)
-                        render(textureAsteroide, asteroide.get(i).getX(), asteroide.get(i).getY());
+                render(textureBackground,0,0);
+               // render(textureNave, nave.getX(), nave.getY());
+//
+//                if(!asteroide.isEmpty()){
+//                    for(int i=0; i<asteroide.size(); i++)
+//                           render(textureAsteroide, asteroide.get(i).getX(), asteroide.get(i).getY());
+//
+//                }
+//
+//                if(!municao.isEmpty()){
+//                    for(int i=0; i<municao.size();i++)
+//                        render(textureBala, municao.get(i).getX(), municao.get(i).getY());
+//                }
 
-                }
-                if(!municao.isEmpty()){
-                    for(int i=0; i<municao.size();i++)
-                        render(textureBala, municao.get(i).getX(), municao.get(i).getY());
-                }
                 Display.update();
                 while (Keyboard.next()){
                     // get event key here
@@ -113,6 +132,7 @@ public class Main {
                         //System.out.println("Direita");
                     }
                 }
+
                 if(time % 5 ==0)
                 {
                     if(!asteroide.isEmpty()){
@@ -122,10 +142,11 @@ public class Main {
                     for(int i=0; i<municao.size();i++)
                         municao.get(i).setY(municao.get(i).getY() - 10);
                 }
+
                 if(time % 200 == 0) {
                         int randomNum = ThreadLocalRandom.current().nextInt(textureAsteroide.getImageWidth()/2, 800 + 1);
                         asteroide.add(new Asteroide(randomNum - (textureAsteroide.getImageWidth()/2), 0, 50));
-                 }
+                }
 
                 time ++;
             }
@@ -133,7 +154,7 @@ public class Main {
             Display.destroy();
         } catch(LWJGLException e) {
             e.printStackTrace();
-        } catch (IOException e) {
+        }catch (IOException e) {
             e.printStackTrace();
         }
     }

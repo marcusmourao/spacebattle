@@ -26,8 +26,8 @@ public class Menu extends BasicGameState {
     // render-method for all the things happening on-screen
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-        g.fillOval(75,100,100,100);
-        g.drawString("Play now!",80,70);
+//        g.fillOval(75,100,100,100);
+        g.drawString("click para jogar!",200,150);
 
     }
 
@@ -38,14 +38,8 @@ public class Menu extends BasicGameState {
         int xpos = Mouse.getX();
         int ypos = Mouse.getY();
 
-
-        if((xpos>75 && xpos<175) && (xpos>160 && ypos<260)){
-            System.out.println("entrou!");
-            System.out.println("("+xpos+","+ypos+")");
-
-            if(input.isMouseButtonDown(0)){
-                sbg.enterState(1); //mudança de estado
-            }
+        if(input.isMouseButtonDown(0)){
+            sbg.enterState(1); //mudança de estado
         }
     }
 
