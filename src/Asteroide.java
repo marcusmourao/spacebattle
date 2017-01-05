@@ -4,8 +4,8 @@
 public class Asteroide extends Objeto {
     private int vida;
 
-    public Asteroide(int x, int y, int vida) {
-        super(x, y);
+    public Asteroide(int x, int y, int largura, int altura, int vida) {
+        super(x, y, largura, altura);
         this.vida = vida;
     }
 

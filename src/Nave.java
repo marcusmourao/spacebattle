@@ -7,8 +7,8 @@ public class Nave extends Objeto {
     private int municao;
     private int combustivel;
 
-    public Nave(int x, int y, int vida, int municao, int combustivel) {
-        super(x, y);
+    public Nave(int x, int y, int largura, int altura, int vida, int municao, int combustivel) {
+        super(x, y, largura, altura);
         this.vida = vida;
         this.municao = municao;
         this.combustivel = combustivel;

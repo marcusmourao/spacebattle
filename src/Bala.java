@@ -4,8 +4,8 @@
 public class Bala extends Objeto {
     int vida;
 
-    public Bala(int x, int y, int vida) {
-        super(x, y);
+    public Bala(int x, int y, int largura, int altura, int vida) {
+        super(x, y, largura, altura);
         this.vida = vida;
     }
 

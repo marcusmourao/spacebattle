@@ -1,13 +1,19 @@
+import java.awt.*;
+
 /**
  * Created by marcus on 02/01/17.
  */
 public class Objeto {
     private int x;
     private int y;
+    private int largura;
+    private int altura;
 
-    public Objeto(int x, int y) {
+    public Objeto(int x, int y, int largura, int altura) {
         this.x = x;
         this.y = y;
+        this.altura = altura;
+        this.largura = largura;
     }
 
     public int getX() {
@@ -24,6 +30,14 @@ public class Objeto {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int getLargura() {
+        return largura;
+    }
+
+    public int getAltura() {
+        return altura;
     }
 
     public int[] getPosition(){
@@ -52,5 +66,13 @@ public class Objeto {
     public void moveEsquerda(){
         this.y = this.x -1;
 
+    }
+
+    public boolean colideCom(Objeto o) {
+        Rectangle atual, outro;
+        atual = new Rectangle(x, y, largura, altura);
+        outro = new Rectangle(o.getX(), o.getY(), o.getLargura(), o.getAltura());
+
+        return atual.intersects(outro);
     }
 }

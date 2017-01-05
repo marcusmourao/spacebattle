@@ -1,3 +1,4 @@
+import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
@@ -8,7 +9,8 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
 
 import java.io.IOException;
-import java.util.Vector;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -21,13 +23,15 @@ public class Game extends BasicGameState {
 
 
     private int time=0;
-    private Vector<Bala> municao = new Vector<>();
-    private Vector<Asteroide> asteroide = new Vector<>();
+    private ArrayList<Bala> municao = new ArrayList<>();
+    private ArrayList<Asteroide> asteroide = new ArrayList<>();
     private Nave nave;
 
     private Image textureNave;
     private Image textureAsteroide;
     private Image textureBala;
+
+    private Time
 
     private Input input;
 
@@ -37,10 +41,10 @@ public class Game extends BasicGameState {
 
         textureNave = new Image("img/nave.png");
         textureAsteroide = new Image("img/asteroid.png");
-        textureBala = new Image("img/bala.jpg");
+        textureBala = new Image("img/bala.png");
 
-        nave = new Nave(400 - (textureNave.getWidth()/2), 600 - 50 - textureNave.getHeight(), 500, 500, 500);
-        asteroide.add(new Asteroide(400 - (textureAsteroide.getWidth()/2), 0, 50));
+        nave = new Nave(400 - ((int) textureNave.getTextureWidth()/2), 600 - 50 - (int) textureNave.getTextureHeight(), (int) textureNave.getTextureWidth(), (int) textureNave.getTextureHeight(), 500, 500, 500);
+        asteroide.add(new Asteroide(400 - (textureAsteroide.getWidth()/2), 0, textureAsteroide.getWidth(), textureAsteroide.getHeight(), 50));
 
 
     }
@@ -67,10 +71,11 @@ public class Game extends BasicGameState {
     public void update(GameContainer gc, StateBasedGame sbg, int arg2) throws SlickException {
         input = gc.getInput();
 
+
         //verifica se um tiro foi disparado
         if (input.isKeyDown(Keyboard.KEY_SPACE)) {
-            System.out.println("Tiro");
-            municao.add(new Bala( nave.getX(), 600 - textureNave.getHeight(), 50));
+            //System.out.println("Tiro");
+            municao.add(new Bala( nave.getX(), 600 - textureNave.getHeight(), textureNave.getWidth(), textureNave.getHeight(), 50));
         }
 
         //muda a posicao da nave para a esquerda
@@ -92,13 +97,20 @@ public class Game extends BasicGameState {
                 for(int i=0; i< asteroide.size(); i++)
                     asteroide.get(i).setY(asteroide.get(i).getY()+1);
             }
-            for(int i=0; i<municao.size();i++)
+            for(int i=0; i<municao.size();i++) {
                 municao.get(i).setY(municao.get(i).getY() - 10);
+                for (int j = 0; j < asteroide.size(); j++)
+                    if (municao.get(i).colideCom(asteroide.get(j))) {
+                        asteroide.remove(j);
+                        System.out.println("Abateu");
+                        municao.remove(i);
+                    }
+            }
         }
 
         if(time % 200 == 0) {
             int randomNum = ThreadLocalRandom.current().nextInt(textureAsteroide.getWidth()/2, 800 + 1);
-            asteroide.add(new Asteroide(randomNum - (textureAsteroide.getWidth()/2), 0, 50));
+            asteroide.add(new Asteroide(randomNum - (textureAsteroide.getWidth()/2), 0, textureAsteroide.getWidth(), textureAsteroide.getHeight(), 50));
         }
 
         time ++;
